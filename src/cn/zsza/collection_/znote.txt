@@ -1,0 +1,55 @@
+数组:
+    数组存储区间是连续的，占用内存严重，故空间复杂的很大。
+    但数组的二分查找时间复杂度小，为O(1)；数组的特点是：寻址容易，插入和删除困难；
+链表：
+     链表存储区间离散，占用内存比较宽松，故空间复杂度很小，但时间复杂度很大，达O（N）。
+     链表的特点是：寻址困难，插入和删除容易。
+List：
+   所谓ArrayList有序，即存入的顺序和取出的顺序一致，元素可以重复。
+   ArrayList:底层数据结构用数组：查询速度较快，但是增删较慢。初始化数组长度为：10
+   LinkedList：底层使用链表数据结构，增删较快，查询较慢。jdk 1.2
+   Vector：底层是数组的数据结构，线程同步。 jdk 1.0
+           支持枚举
+Set:
+   元素是无序的，元素不可以重复
+   HashSet：底层数据结构是哈希表，线程是非同步的
+            保证元素唯一性：判断元素的hashCode值是否相等
+   TreeSet：取出按升序取出
+      public static void main(String[] args) {
+              Set set = new TreeSet();
+              set.add(new Student(10,"小一"));
+              set.add(new Student(8,"小二"));
+              set.add(new Student(12,"小三"));
+              Iterator it = set.iterator();
+
+              while (it.hasNext())
+                  System.out.println(it.next());
+          }
+      Exception in thread "main" java.lang.ClassCastException:
+      cn.zsza.collection_.Student cannot be cast to java.lang.Comparable
+      学生对象不具备比较性，要具备比较性，必须实现Comparable接口
+Jdk 1.5 自动装箱、拆箱；泛型
+   泛型：List<String> 泛型增加了安全性，如果指定结合的元素类型为String,
+   而在集合扔添加非整型数据，则编译通不过，避免了运行时异常
+
+   哈希表的基本思想是：以线性表中每个元素的关键字key为自变量，通过一定的函数关系h(key)计算出函数的值，
+   把这个值作为数组的下标，将元素存入对应的数组元素中。
+Comparator和Comparable的比较：
+    他们都是java的一个接口, 并且是用来对自定义的class比较大小的
+    什么是自定义class: 如 public class Person{ String name; int age }.
+    当我们有这么一个personList,里面包含了person1, person2, person3.....,
+    我们用Collections.sort( personList ),
+    是得不到预期的结果的（Person还不具有比较性）。这时肯定有人要问, 那为什么可以排序一个字符串list呢:
+    String 这个对象已经帮我们实现了 Comparable接口 , 所以我们的 Person 如果想排序, 也要实现一个比较器。
+    区别：
+      Comparator位于包java.util下，而Comparable位于包java.lang下
+      Comparator 是定义在Person的外部的, 此时我们的Person类的结构不需要有任何变化,如
+      public class Person{ String name; int age },
+      然后我们另外定义一个比较器:
+         public PersonComparator implements Comparator() {..比较Person的大小..},
+      Comparable定义在内部
+         public class Person implements Comparable
+
+
+
+

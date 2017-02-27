@@ -1,0 +1,59 @@
+吃透Java中的动态代理
+    动态代理在Java中是很重要的一部分，在很多框架中都会用到，如Spring中的AOP、Hadoop中的RPC等。
+    为此在这把我对Java中的动态代理的理解分享给大家，同时写了一个模拟AOP编程的实例
+    如果要对第三方提供的JAR包中的某个类中的某个方法的前后加上自己的逻辑，比如打LOG，
+    注意此时我们只有第三方提供的CLASS文件，因此根本不可能去修改别人的源代码，那该怎么办？
+    有两种方法可以实现，一种是利用继承，另一种是利用聚合。举例说明：
+    假设第三方中提供一个Run接口，里面只一个run方法，以及它的实现类Person。
+    public interface Run {
+        public void run();
+    }
+    public class Person implements Run {
+        @Override
+        public void run() {
+            System.out.println("person running...");
+        }
+    }
+
+    继承实现：
+      public class SuperMan1 extends Person {
+          @Override
+          public void run() {
+              //方法开始前打LOG
+              LOG.info("super man1 before run...");
+              super.run();
+              //方法结束后打LOG
+              LOG.info("super man1 after run...");
+          }
+      }
+    聚合实现：
+      public class SuperMan2 implements Run {
+          private Run person;
+          public SuperMan2(Run person) {
+              this.person = person;
+          }
+          @Override
+          public void run() {
+             //方法开始前打LOG
+              LOG.info("super man2 before run...");
+              person.run();
+              //方法结束后打LOG
+              LOG.info("super man2 after run...");
+          }
+      }
+    这两种实现方式，哪一种更好呢？
+    显然是第二种利用聚合实现方法好，因为这种方式很灵活，同时又不会有多层的父子类关系。
+    而继承最不好的地方就是不灵活，同时会很容易形成臃肿的父子类关系，不利于后期的维护。
+
+    动态代理的意思就是一个类的（比如Person）的代理类（比如SuperMan2）是动态生成的，
+    也就是说这个代理类不是提前写好的，是在程序运行时动态的生成的。
+
+    利用Proxy类中的newProxyInstance静态方法，就可以动态生成一个代理类。这个方法有三个参数：
+       第一个是要一个类加载器，它的作用是将动态生成的代理类的字节码文件加载到JVM虚拟机中，一般我们可以用被代理类的加载器；
+       第二个是被代理类实现的接口的Class类；
+       第三个是InvocationHandler的子类，在这个类中的invoke方法中，对某个方法的前后加入加强的逻辑。
+
+
+
+
+
