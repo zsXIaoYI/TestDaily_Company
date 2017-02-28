@@ -18,11 +18,7 @@ public class LongTest {
         System.out.println(aa.intValue());     // Long类型转换为int
         System.out.println(aa.doubleValue());
         System.out.println("...........................");
-
-
-
-
-
+        System.out.println("aaaaaaaaaaaa");
 
     }
 }
